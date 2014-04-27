@@ -9,10 +9,10 @@ import Control.Monad (mplus)
 import Data.Aeson
 import Data.Aeson.Lens
 import Data.List (intersperse)
-import Data.Traversable
 import Data.Map ((!), fromList, Map)
-import Data.Maybe (fromMaybe, catMaybes)
 import qualified Data.Map as Map
+import Data.Maybe (fromMaybe, catMaybes)
+import Data.Traversable
 import Network.Wreq
 import Prelude hiding (id,mapM, mapM_, min, max)
 import Types
@@ -48,9 +48,7 @@ tabulateItem :: Item -> String
 tabulateItem it =
   concat $ intersperse "\t" [ maybe "" (show.max) (k it) | k <- table ]
 
-generate = hero >>= mapM (putStrLn . tabulateItem) >>= ignore
-
-ignore _ = return ()
+generate = (fmap.fmap) tabulateItem hero
 
 orElse m1 m2 it = m1 it `mplus` m2 it
 unpack tag (Item attrs gems) = do
