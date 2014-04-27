@@ -4,7 +4,7 @@
 {-# LANGUAGE NoMonomorphismRestriction #-}
 module Diablo(career,hero,item,generate,run) where
 import Control.Applicative
-import Control.Lens hiding ((.=))
+import Lens.Family  ((^.))
 import Control.Monad (mplus)
 import Data.Aeson
 import Data.Aeson.Lens

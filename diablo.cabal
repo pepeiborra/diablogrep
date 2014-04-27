@@ -21,8 +21,8 @@ executable diablo
   -- other-extensions:    
   build-depends:       base >=4.7 && <4.8,
                        aeson,
+                       lens-family-core,
                        wreq,
-                       lens,
                        containers
   -- hs-source-dirs:      
   default-language:    Haskell2010
@@ -38,7 +38,7 @@ executable diabloSnap
                        mtl,
                        aeson,
                        wreq,
-                       lens,
+                       lens-family-core,
                        containers,
                        snap-core,
                        snap-server
