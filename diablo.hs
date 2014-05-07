@@ -7,7 +7,6 @@ import Control.Applicative
 import Lens.Family  ((^.))
 import Control.Monad (mplus)
 import Data.Aeson
-import Data.Aeson.Lens
 import Data.List (intersperse)
 import Data.Map ((!), fromList, Map)
 import qualified Data.Map as Map
@@ -23,8 +22,7 @@ run m = let ?host="eu"
             ?char="Idiom"
           in m
 
-main = run generate
-
+retrieve :: FromJSON a => String -> IO a
 retrieve url = do
   contents <- asJSON =<< get url
   return (contents ^. responseBody)
@@ -48,9 +46,12 @@ tabulateItem :: Item -> String
 tabulateItem it =
   concat $ intersperse "\t" [ maybe "" (show.max) (k it) | k <- table ]
 
+generate :: (?host::String, ?char::String, ?battletag::String) => IO (HeroDetails String)
 generate = (fmap.fmap) tabulateItem hero
 
 orElse m1 m2 it = m1 it `mplus` m2 it
+
+unpack :: String -> Item -> Maybe Attribute
 unpack tag (Item attrs gems) = do
   main <- unpackAttrs attrs
   let extra = map (unpackAttrs . gem_attributesRaw) gems
@@ -58,6 +59,7 @@ unpack tag (Item attrs gems) = do
  where
   unpackAttrs attrs = Map.lookup tag attrs
 
+table :: [Item -> Maybe Attribute]
 table =
   [ unpack "Damage_Min#Physical"
   , \it@(Item attrs _) -> do { min <- (table!!0) it

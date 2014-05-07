@@ -26,6 +26,7 @@ site =
           ] <|>
     dir "static" (serveDirectory ".")
 
+fetchHandler :: MonadSnap m => m ()
 fetchHandler = run $ do
   writeBS(pack $ printf "Grepping %s stats for %s %s:\n" ?host ?battletag ?char )
   liftIO diablo >>= writeBS . pack
